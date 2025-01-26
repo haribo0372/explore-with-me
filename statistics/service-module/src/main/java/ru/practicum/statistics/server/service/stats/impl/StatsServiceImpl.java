@@ -9,7 +9,6 @@ import ru.practicum.statistics.server.repository.EndpointHitRepository;
 import ru.practicum.statistics.server.service.stats.StatsService;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,22 +20,18 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public Collection<ViewStats> getStats(GetStatsParams params) {
-
-        List<ViewStats> viewStats = new ArrayList<>();
-
         LocalDateTime start = params.getStart();
         LocalDateTime end = params.getEnd();
 
-        if (params.getUnique())
-            params.getUris().forEach(uri ->
-                    viewStats.addAll(endpointHitRepository.getStatsWithUniqueIp(start, end, uri)));
-        else
-            params.getUris().stream().forEach(uri ->
-                    viewStats.addAll(endpointHitRepository.getStatsWithoutUniqueIp(start, end, uri)));
+        List<ViewStats> viewStats = params.getUnique()
+                ? endpointHitRepository.getStatsWithUniqueIp(start, end, params.getUris().isEmpty() ?
+                null : params.getUris())
+                : endpointHitRepository.getStatsWithoutUniqueIp(start, end, params.getUris().isEmpty() ?
+                null : params.getUris());
 
         log.info("StatsServiceImpl::getStats({}, {}, {}, {}) -> {}",
                 start, end, params.getUnique(), params.getUnique(), viewStats);
-
+        viewStats.sort((o1, o2) -> Long.compare(o2.getHits(), o1.getHits()));
         return viewStats;
     }
 }
