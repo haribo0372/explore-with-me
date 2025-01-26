@@ -1,6 +1,9 @@
-package ru.practicum.statistics.models;
+package ru.practicum.statistics.server.models;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter

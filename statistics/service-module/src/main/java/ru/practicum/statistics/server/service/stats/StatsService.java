@@ -1,11 +1,9 @@
-package ru.practicum.statistics.service.stats;
+package ru.practicum.statistics.server.service.stats;
 
 import ru.practicum.statistics.dto.GetStatsParams;
-import ru.practicum.statistics.models.ViewStats;
+import ru.practicum.statistics.server.models.ViewStats;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
 
 public interface StatsService {
     Collection<ViewStats> getStats(GetStatsParams params);

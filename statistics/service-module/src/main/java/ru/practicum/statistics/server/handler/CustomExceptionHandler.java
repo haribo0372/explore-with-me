@@ -1,4 +1,4 @@
-package ru.practicum.statistics.handler;
+package ru.practicum.statistics.server.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

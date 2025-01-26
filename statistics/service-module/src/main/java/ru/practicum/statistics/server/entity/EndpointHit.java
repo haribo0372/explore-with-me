@@ -1,4 +1,4 @@
-package ru.practicum.statistics.entity;
+package ru.practicum.statistics.server.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

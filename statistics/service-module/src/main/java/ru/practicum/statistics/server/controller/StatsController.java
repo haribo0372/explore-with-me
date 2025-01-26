@@ -1,11 +1,14 @@
-package ru.practicum.statistics.controller;
+package ru.practicum.statistics.server.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.statistics.dto.GetStatsParams;
-import ru.practicum.statistics.models.ViewStats;
-import ru.practicum.statistics.service.stats.StatsService;
+import ru.practicum.statistics.server.models.ViewStats;
+import ru.practicum.statistics.server.service.stats.StatsService;
 
 import java.util.Collection;
 

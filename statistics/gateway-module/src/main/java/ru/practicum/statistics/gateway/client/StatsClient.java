@@ -1,4 +1,4 @@
-package ru.practicum.statistics.client;
+package ru.practicum.statistics.gateway.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

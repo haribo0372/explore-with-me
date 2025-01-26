@@ -1,12 +1,12 @@
-package ru.practicum.statistics.controller;
+package ru.practicum.statistics.gateway.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.statistics.client.HitsClient;
 import ru.practicum.statistics.dto.EndpointHitDto;
+import ru.practicum.statistics.gateway.client.HitsClient;
 
 @RestController
 @RequestMapping("/hit")

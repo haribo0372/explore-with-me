@@ -1,4 +1,4 @@
-package ru.practicum.statistics.controller;
+package ru.practicum.statistics.gateway.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.statistics.client.StatsClient;
+import ru.practicum.statistics.gateway.client.StatsClient;
 
 import java.time.LocalDateTime;
 import java.util.List;

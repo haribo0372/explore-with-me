@@ -1,9 +1,9 @@
-package ru.practicum.statistics.mapper;
+package ru.practicum.statistics.server.mapper;
 
-import ru.practicum.statistics.util.DateTimeFormating;
 import ru.practicum.statistics.dto.EndpointHitDto;
 import ru.practicum.statistics.dto.ResponseEndpointHitDto;
-import ru.practicum.statistics.entity.EndpointHit;
+import ru.practicum.statistics.server.entity.EndpointHit;
+import ru.practicum.statistics.util.DateTimeFormating;
 
 public class EndpointMapper implements DateTimeFormating {
 

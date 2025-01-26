@@ -7,7 +7,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>ru.practicum.statistics</groupId>
+    <groupId>ru.practicum.statistics.gateway</groupId>
     <artifactId>gateway-module</artifactId>
     <packaging>jar</packaging>
 
