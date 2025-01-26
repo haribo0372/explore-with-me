@@ -9,7 +9,7 @@ services:
       - stats-gateway
 #      - ewm-service_db
     environment:
-      - EWM_STATISTICS.url=http://ewm-stat_gateway:9090
+      - EWM_STATISTICS.url=http://stats-gateway:9090
 #
 #  ewm-service_db:
 #    image: postgres:16.1
@@ -28,8 +28,8 @@ services:
 
   stats-gateway:
     build: statistics/gateway-module
-    image: ewm-stat_gateway
-    container_name: ewm-stat_gateway
+    image: stats-gateway
+    container_name: stats-gateway
     ports:
       - "9090:9090"
     depends_on:
@@ -44,7 +44,8 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      - ewm-stat_db
+      ewm-stat_db:
+        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-stat_db:5432/stat
       - SPRING_DATASOURCE_USERNAME=ewm_user
