@@ -1,14 +1,66 @@
 services:
-  stats-server:
+  ewm-service:
+    build: basic-service
+    image: ewm-basic_service
+    container_name: ewm-basic_service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - ewm-stat_gateway
+    #      - ewm-service_db
+    environment:
+      - EWM_STATISTICS.url=http://ewm-stat_gateway:9090
+  #
+  #  ewm-service_db:
+  #    image: postgres:16.1
+  #    container_name: postgres
+  #    ports:
+  #      - "6542:5433"
+  #    environment:
+  #      - POSTGRES_PASSWORD=ewm_password
+  #      - POSTGRES_USER=ewm_user
+  #      - POSTGRES_DB=ewm_service
+  #    healthcheck:
+  #      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+  #      timeout: 5s
+  #      interval: 5s
+  #      retries: 10
+
+  ewm-stat_gateway:
+    build: statistics/gateway-module
+    image: ewm-stat_gateway
+    container_name: ewm-stat_gateway
     ports:
       - "9090:9090"
+    depends_on:
+      - ewm-stat_service
+    environment:
+      - EWM_STAT_SERVICE_URL=http://ewm-stat_service:8082
 
-  stats-db:
-    image: postgres:16.1
-
-  ewm-service:
+  ewm-stat_service:
+    build: statistics/service-module
+    image: ewm-stat_service
+    container_name: ewm-stat_service
     ports:
-      - "8080:8080"
+      - "8082:8082"
+    depends_on:
+      - ewm-stat_db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-stat_db:5432/stat
+      - SPRING_DATASOURCE_USERNAME=ewm_user
+      - SPRING_DATASOURCE_PASSWORD=ewm_password
 
-  ewm-db:
+  ewm-stat_db:
     image: postgres:16.1
+    container_name: postgres
+    ports:
+      - "6541:5432"
+    environment:
+      - POSTGRES_PASSWORD=ewm_password
+      - POSTGRES_USER=ewm_user
+      - POSTGRES_DB=stat
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
