@@ -34,7 +34,7 @@ services:
       - "9090:9090"
     depends_on:
       - stats-server
-#    environment:
+    environment:
       - EWM_STAT_SERVICE_URL=http://stats-server:8082
 
   stats-server:
