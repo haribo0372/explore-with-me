@@ -8,8 +8,8 @@ services:
     depends_on:
       - stats-gateway
 #      - ewm-service_db
-    environment:
-      - EWM_STATISTICS.url=http://stats-gateway:9090
+#    environment:
+#      - EWM_STATISTICS.url=http://stats-gateway:9090
 #
 #  ewm-service_db:
 #    image: postgres:16.1
@@ -34,8 +34,8 @@ services:
       - "9090:9090"
     depends_on:
       - stats-server
-    environment:
-      - EWM_STAT_SERVICE_URL=http://stats-server:8082
+#    environment:
+#      - EWM_STAT_SERVICE_URL=http://stats-server:8082
 
   stats-server:
     build: statistics/service-module
