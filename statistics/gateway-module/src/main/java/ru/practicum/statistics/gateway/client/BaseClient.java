@@ -21,9 +21,10 @@ public class BaseClient {
         return makeAndSendRequest(HttpMethod.GET, path, parameters, null);
     }
 
-    protected <T> ResponseEntity<Object> get(String path, T body){
+    protected <T> ResponseEntity<Object> get(String path, T body) {
         return makeAndSendRequest(HttpMethod.GET, path, null, body);
     }
+
     protected <T> ResponseEntity<Object> post(String path, T body) {
         return post(path, null, body);
     }
@@ -35,7 +36,7 @@ public class BaseClient {
 
     private <T> ResponseEntity<Object> makeAndSendRequest(HttpMethod method, String path, @Nullable Map<String, Object> parameters, @Nullable T body) {
         HttpEntity<T> requestEntity = new HttpEntity<>(body, defaultHeaders());
-        System.out.println("PARAMETERS : \t"+parameters);
+        System.out.println("PARAMETERS : \t" + parameters);
         ResponseEntity<Object> ewmStatServerResponse;
         try {
             if (parameters != null) {

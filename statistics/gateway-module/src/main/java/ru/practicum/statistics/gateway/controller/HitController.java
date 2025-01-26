@@ -16,7 +16,7 @@ public class HitController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Object> saveEndpoint(@RequestBody @Valid EndpointHitDto endpointHitDto){
+    public ResponseEntity<Object> saveEndpoint(@RequestBody @Valid EndpointHitDto endpointHitDto) {
         return client.postSaveEndpointHit(endpointHitDto);
     }
 }
