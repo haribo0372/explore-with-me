@@ -54,7 +54,7 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(Throwable.class)
-    public ResponseEntity<ExceptionResponse> handleThrowable(Throwable ex, HttpServletRequest request) {
+    public ResponseEntity<ExceptionResponse> handleThrowable(Throwable ex, HttpServletRequest request){
         ExceptionResponse exResp = new ExceptionResponse(
                 500,
                 HttpStatus.INTERNAL_SERVER_ERROR,

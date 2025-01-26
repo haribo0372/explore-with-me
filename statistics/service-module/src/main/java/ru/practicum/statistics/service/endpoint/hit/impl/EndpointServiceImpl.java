@@ -20,7 +20,7 @@ public class EndpointServiceImpl implements EndpointService {
     private final EndpointHitRepository endpointHitRepository;
 
     @Override
-    public ResponseEndpointHitDto save(EndpointHitDto endpointHitDto) {
+    public ResponseEndpointHitDto save(EndpointHitDto endpointHitDto){
         EndpointHit endpointHit = EndpointMapper.fromDto(endpointHitDto);
         EndpointHit saved = endpointHitRepository.save(endpointHit);
         log.info("EndpointHit {} saved", saved);

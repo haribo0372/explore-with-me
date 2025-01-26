@@ -15,7 +15,7 @@ public class HitController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEndpointHitDto saveEndpoint(@RequestBody EndpointHitDto endpointHitDto) {
+    public ResponseEndpointHitDto saveEndpoint(@RequestBody EndpointHitDto endpointHitDto){
         return endpointService.save(endpointHitDto);
     }
 }
