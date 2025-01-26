@@ -35,7 +35,7 @@ services:
     depends_on:
       - stats-server
     environment:
-      - EWM_STAT_SERVICE_URL=http://stats-server:8082
+      - EWM_STAT_SERVICE_URL=http://localhost:8082
 
   stats-server:
     build: statistics/service-module
