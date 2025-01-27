@@ -7,24 +7,24 @@ services:
       - "8083:8083"
     depends_on:
       - stats-server
-#      - ewm-service_db
+    #      - ewm-service_db
     environment:
       - EWM_STATISTICS.url=http://stats-server:9090
-#
-#  ewm-service_db:
-#    image: postgres:16.1
-#    container_name: postgres
-#    ports:
-#      - "6542:5433"
-#    environment:
-#      - POSTGRES_PASSWORD=ewm_password
-#      - POSTGRES_USER=ewm_user
-#      - POSTGRES_DB=ewm_service
-#    healthcheck:
-#      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
-#      timeout: 5s
-#      interval: 5s
-#      retries: 10
+  #
+  #  ewm-service_db:
+  #    image: postgres:16.1
+  #    container_name: postgres
+  #    ports:
+  #      - "6542:5433"
+  #    environment:
+  #      - POSTGRES_PASSWORD=ewm_password
+  #      - POSTGRES_USER=ewm_user
+  #      - POSTGRES_DB=ewm_service
+  #    healthcheck:
+  #      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+  #      timeout: 5s
+  #      interval: 5s
+  #      retries: 10
 
   stats-server:
     build: statistics/gateway-module
@@ -53,15 +53,15 @@ services:
 
   ewm-stat_db:
     image: postgres:16.1
-    container_name: postgres
+    container_name: ewm-stat_db
     ports:
       - "6541:5432"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=stat
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: stat
     healthcheck:
-      test: pg_isready -q -d $POSTGRES_DB -U $POSTGRES_USER
+      test: [ "CMD-SHELL", "pg_isready -q -d ${POSTGRES_DB} -U ${POSTGRES_USER}" ]
       timeout: 5s
       interval: 5s
       retries: 10
