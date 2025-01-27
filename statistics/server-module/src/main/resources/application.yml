@@ -1,0 +1,29 @@
+server:
+  port: 9090
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/exploreWithMe_statistics
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+
+logging.level:
+  ru.practicum.statistics: DEBUG
+  org:
+    springframework:
+      data: DEBUG
+      orm.jpa: INFO
+      transaction: INFO
+    hibernate:
+      SQL: DEBUG
+      type:
+        descriptor:
+          sql: TRACE
+    zalando.logbook: DEBUG

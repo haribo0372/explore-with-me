@@ -20,8 +20,15 @@
     </properties>
 
     <modules>
-        <module>service-module</module>
         <module>dto-module</module>
-        <module>gateway-module</module>
+        <module>services-module</module>
+        <module>server-module</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+    </dependencies>
 </project>
