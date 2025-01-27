@@ -48,8 +48,8 @@ services:
         condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-stat_db:5432/stat
-      - SPRING_DATASOURCE_USERNAME=ewm_user
-      - SPRING_DATASOURCE_PASSWORD=ewm_password
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=123456
 
   ewm-stat_db:
     image: postgres:16.1
@@ -57,8 +57,8 @@ services:
     ports:
       - "6541:5432"
     environment:
-      - POSTGRES_PASSWORD=ewm_password
-      - POSTGRES_USER=ewm_user
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
       - POSTGRES_DB=stat
     healthcheck:
       test: pg_isready -q -d $POSTGRES_DB -U $POSTGRES_USER
