@@ -21,7 +21,6 @@ public class StatsController {
 
     @GetMapping
     public Collection<ViewStats> getStats(@RequestBody GetStatsParams params) {
-
         return statsService.getStats(params);
     }
 }
