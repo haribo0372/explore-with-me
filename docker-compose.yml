@@ -6,9 +6,15 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - stats-service
+      stats-service:
+        condition: service_healthy
+      ewm-service_db:
+        condition: service_healthy
     environment:
       - EWM_STATISTICS.url=http://stats-service:9090
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-service_db:5432/ewm_main
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=123456
 
   stats-service:
     build: statistics/server-module
@@ -33,6 +39,21 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: stat
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -q -d ${POSTGRES_DB} -U ${POSTGRES_USER}" ]
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
+  ewm-service_db:
+    image: postgres:16.1
+    container_name: ewm-service_db
+    ports:
+      - "6541:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: ewm_main
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -q -d ${POSTGRES_DB} -U ${POSTGRES_USER}" ]
       timeout: 5s
