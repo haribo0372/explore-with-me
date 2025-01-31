@@ -11,7 +11,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import ru.practicum.basic.dto.category.CategoryDto;
 import ru.practicum.basic.dto.user.UserShortDto;
-import ru.practicum.basic.models.Location;
 
 import java.time.LocalDateTime;
 

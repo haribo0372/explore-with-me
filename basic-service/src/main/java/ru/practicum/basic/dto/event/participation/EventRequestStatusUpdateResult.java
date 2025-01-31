@@ -13,11 +13,11 @@ public class EventRequestStatusUpdateResult {
     private HashSet<ParticipationRequestDto> confirmedRequests;
     private HashSet<ParticipationRequestDto> rejectedRequests;
 
-    public boolean addToConfirmedRequests(ParticipationRequestDto prd){
+    public boolean addToConfirmedRequests(ParticipationRequestDto prd) {
         return confirmedRequests.add(prd);
     }
 
-    public boolean addToRejectedRequests(ParticipationRequestDto prd){
+    public boolean addToRejectedRequests(ParticipationRequestDto prd) {
         return rejectedRequests.add(prd);
     }
 }
