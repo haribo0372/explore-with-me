@@ -11,8 +11,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "app_users")
-public class User implements BaseEntity {
+@Table(name = "categories")
+public class Category implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,4 @@ public class User implements BaseEntity {
 
     @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "email", nullable = false)
-    private String email;
 }

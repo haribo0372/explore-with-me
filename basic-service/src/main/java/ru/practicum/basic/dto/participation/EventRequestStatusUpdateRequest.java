@@ -1,4 +1,4 @@
-package ru.practicum.basic.dto.event.participation;
+package ru.practicum.basic.dto.participation;
 
 import lombok.Data;
 import ru.practicum.basic.models.enums.EventRequestStatus;

@@ -6,7 +6,7 @@ import ru.practicum.basic.dto.user.UserDto;
 import java.util.Collection;
 
 public interface UserService {
-    UserDto save(NewUserRequest newUserRequest);
+    UserDto create(NewUserRequest newUserRequest);
 
     Collection<UserDto> getAll(Collection<Long> userIds, int from, int size);
 

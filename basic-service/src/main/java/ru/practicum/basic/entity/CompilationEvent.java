@@ -9,19 +9,22 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "app_users")
-public class User implements BaseEntity {
+@AllArgsConstructor
+@Table(name = "compilation_events")
+public class CompilationEvent implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "compilation_id", nullable = false)
+    private Compilation compilation;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+    @ManyToOne
+    @JoinColumn(name = "event_id", nullable = false)
+    private Event event;
 }
+

@@ -1,7 +1,7 @@
 package ru.practicum.basic.models.enums;
 
 public enum ParticipationRequestStatus {
-    PENDING;
+    PENDING, REVIEWED;
 
     public static ParticipationRequestStatus fromString(String status) {
         if (status == null) {

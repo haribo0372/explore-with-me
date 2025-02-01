@@ -16,6 +16,7 @@ import java.util.List;
 @RequestMapping("/admin/users")
 @RequiredArgsConstructor
 public class AdminUsersController {
+
     private final UserService userService;
 
     @GetMapping
@@ -27,7 +28,7 @@ public class AdminUsersController {
 
     @PostMapping
     public UserDto createNewUser(@RequestBody @Valid NewUserRequest newUserRequest) {
-        return userService.save(newUserRequest);
+        return userService.create(newUserRequest);
     }
 
     @DeleteMapping("/{userId}")

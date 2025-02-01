@@ -1,4 +1,4 @@
-package ru.practicum.basic.dto.event.compilation;
+package ru.practicum.basic.dto.compilation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;

@@ -5,16 +5,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.basic.dto.event.compilation.CompilationDto;
-import ru.practicum.basic.dto.event.compilation.NewCompilationDto;
-import ru.practicum.basic.dto.event.compilation.UpdateCompilationRequest;
+import ru.practicum.basic.dto.compilation.CompilationDto;
+import ru.practicum.basic.dto.compilation.NewCompilationDto;
+import ru.practicum.basic.dto.compilation.UpdateCompilationRequest;
 import ru.practicum.basic.service.CompilationService;
 
 @RestController
 @RequestMapping("/admin/compilations")
 @RequiredArgsConstructor
 public class AdminCompilationsController {
-    private CompilationService compilationService;
+
+    private final CompilationService compilationService;
 
     @PostMapping
     public CompilationDto createCompilation(@RequestBody @Valid NewCompilationDto newCategoryDto) {
