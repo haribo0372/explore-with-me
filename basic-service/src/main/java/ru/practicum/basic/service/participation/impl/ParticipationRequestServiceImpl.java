@@ -67,7 +67,8 @@ public class ParticipationRequestServiceImpl extends BaseServiceImpl<Participati
                             " переданное событие находится в стадии %s", event.getState()));
         }
 
-        if (event.getConfirmedRequests() == event.getParticipantLimit().longValue()) {
+        if (event.getParticipantLimit() != 0 &&
+                event.getConfirmedRequests() == event.getParticipantLimit().longValue()) {
             throw new ConflictParticipationRequestException(
                     "Достигнут лимит запросов на участие в переданном событии", HttpStatus.CONFLICT);
         }
@@ -76,7 +77,7 @@ public class ParticipationRequestServiceImpl extends BaseServiceImpl<Participati
         participationRequest.setRequester(user);
         participationRequest.setEvent(event);
         participationRequest.setCreated(LocalDateTime.now().withNano(0));
-        if (event.getRequestModeration()) {
+        if (event.getRequestModeration() && event.getParticipantLimit() != 0) {
             participationRequest.setStatus(PENDING);
         } else {
             event.setConfirmedRequests(event.getConfirmedRequests() + 1);

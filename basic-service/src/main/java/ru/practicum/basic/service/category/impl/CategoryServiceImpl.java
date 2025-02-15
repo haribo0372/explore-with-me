@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.basic.dto.category.CategoryDto;
 import ru.practicum.basic.dto.category.NewCategoryDto;
 import ru.practicum.basic.entity.Category;
-import ru.practicum.basic.exception.models.CategoryException;
+import ru.practicum.basic.exception.models.WrongRequestParam;
 import ru.practicum.basic.mappers.CategoryMapper;
 import ru.practicum.basic.repository.CategoryRepository;
 import ru.practicum.basic.service.base.BaseServiceImpl;
@@ -33,7 +33,7 @@ public class CategoryServiceImpl extends BaseServiceImpl<Category>
     @Override
     public CategoryDto create(NewCategoryDto newCategoryDto) {
         if (categoryRepository.findByName(newCategoryDto.getName()).isPresent())
-            throw new CategoryException(
+            throw new WrongRequestParam(
                     format("Категория с name='%s' уже существует", newCategoryDto.getName()), HttpStatus.CONFLICT);
 
         Category category = CategoryMapper.fromDto(newCategoryDto);
@@ -44,7 +44,7 @@ public class CategoryServiceImpl extends BaseServiceImpl<Category>
     public void delete(Long id) {
         Category category = super.findById(id);
         if (!category.getEvents().isEmpty())
-            throw new CategoryException("Категория содержит события", HttpStatus.CONFLICT);
+            throw new WrongRequestParam("Категория содержит события", HttpStatus.CONFLICT);
         super.delete(id);
     }
 
@@ -54,7 +54,7 @@ public class CategoryServiceImpl extends BaseServiceImpl<Category>
 
         Optional<Category> foundByName = categoryRepository.findByName(newData.getName());
         if (foundByName.isPresent() && !Objects.equals(foundByName.get().getId(), category.getId()))
-            throw new CategoryException(
+            throw new WrongRequestParam(
                     format("Категория с name='%s' уже существует", newData.getName()), HttpStatus.CONFLICT);
 
         category.setName(newData.getName());

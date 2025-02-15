@@ -76,6 +76,13 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(apiError, calibrateStatus(apiError, calibrateStatus(apiError, HttpStatus.CONFLICT)));
     }
 
+    @ExceptionHandler(WrongRequestParam.class)
+    public ResponseEntity<ApiError> handleWrongRequestParam(WrongRequestParam ex) {
+        ApiError apiError = new ApiError(ex);
+        loggingInfo("ExceptionHandler(WrongRequestParam.class)", apiError);
+        return new ResponseEntity<>(apiError, calibrateStatus(apiError, calibrateStatus(apiError, HttpStatus.BAD_REQUEST)));
+    }
+
     @ExceptionHandler(UserAdminException.class)
     public ResponseEntity<ApiError> handleUserAdminException(UserAdminException ex) {
         ApiError apiError = new ApiError(ex);

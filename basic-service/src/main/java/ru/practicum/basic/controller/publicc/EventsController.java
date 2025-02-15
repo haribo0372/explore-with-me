@@ -3,9 +3,11 @@ package ru.practicum.basic.controller.publicc;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.basic.dto.event.EventFullDto;
 import ru.practicum.basic.dto.event.EventShortDto;
+import ru.practicum.basic.exception.models.WrongRequestParam;
 import ru.practicum.basic.models.enums.SortPublishEvent;
 import ru.practicum.basic.service.event.PublicEventService;
 
@@ -32,6 +34,10 @@ public class EventsController {
                                                  @RequestParam(required = false, defaultValue = "0") int from,
                                                  @RequestParam(required = false, defaultValue = "10") int size,
                                                  HttpServletRequest request) {
+        if (rangeStart != null && rangeEnd != null && rangeStart.isAfter(rangeEnd)) {
+            throw new WrongRequestParam("'rangeStart' должен быть <= 'rangeEnd'", HttpStatus.BAD_REQUEST);
+        }
+
         return eventService.getAllPublishEvents(
                 text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size, request
         );
