@@ -7,12 +7,13 @@ services:
       - "8080:8080"
     depends_on:
       stats-service:
-        condition: service_healthy
+        condition: service_started
       ewm-service_db:
         condition: service_healthy
     environment:
-      - EWM_STATISTICS.url=http://stats-service:9090
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-service_db:5432/ewm_main
+      - SERVER_PORT=8080
+      - EWM_STATISTICS_URL=http://stats-service:9090
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-service_db:5433/ewm_main
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=123456
 
@@ -49,13 +50,14 @@ services:
     image: postgres:16.1
     container_name: ewm-service_db
     ports:
-      - "6541:5432"
+      - "6542:5433"  # Оставляем, но этого недостаточно!
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: ewm_main
+    command: [ "postgres", "-p", "5433" ]  # <-- Указываем PostgreSQL запускаться на 5433
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -q -d ${POSTGRES_DB} -U ${POSTGRES_USER}" ]
+      test: [ "CMD-SHELL", "pg_isready -q -d ${POSTGRES_DB} -U ${POSTGRES_USER} -p 5433" ]
       timeout: 5s
       interval: 5s
       retries: 10

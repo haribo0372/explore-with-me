@@ -346,7 +346,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event>
         Collection<Event> foundEvents = eventRepository.searchEvents(
                         text, categories, paid, start, end, onlyAvailable, pageRequest)
                 .getContent().stream().map(event -> {
-                    String uri = format("events/%d", event.getId());
+                    String uri = format("/events/%d", event.getId());
                     statsClient.postHit(uri, request.getRemoteAddr());
                     Collection<ViewStats> stats = statsClient.getStats(LocalDateTime.of(1999, 1, 16, 0, 0),
                             LocalDateTime.now().plusNanos(60), List.of(uri), true);
@@ -355,17 +355,15 @@ public class EventServiceImpl extends BaseServiceImpl<Event>
                     fillConfirmedRequests(saved);
                     return saved;
                 }).toList();
-
-        return toEventShortDto(
-                foundEvents
-        );
+        statsClient.postHit("/events", request.getRemoteAddr());
+        return toEventShortDto(foundEvents);
     }
 
     @Override
     public EventFullDto getPublishEventById(Long eventId, HttpServletRequest request) {
         Event event = super.findById(eventId);
 
-        String uri = format("events/%d", eventId);
+        String uri = format("/events/%d", eventId);
         statsClient.postHit(uri, request.getRemoteAddr());
         Collection<ViewStats> stats = statsClient.getStats(LocalDateTime.of(1999, 1, 16, 0, 0),
                 LocalDateTime.now().plusNanos(60), List.of(uri), true);

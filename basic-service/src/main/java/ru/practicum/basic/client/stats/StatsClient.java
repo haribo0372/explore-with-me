@@ -31,32 +31,36 @@ public class StatsClient extends BaseClient {
         );
     }
 
+
     public Collection<ViewStats> getStats(LocalDateTime start, LocalDateTime end,
                                           List<String> uris, Boolean unique) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        String formattedStart = start != null ? start.format(formatter) : null;
-        String formattedEnd = end != null ? end.format(formatter) : null;
+        UriComponentsBuilder builder = UriComponentsBuilder.fromPath("/stats");
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromPath("/stats")
-                .queryParam("start", formattedStart)
-                .queryParam("end", formattedEnd)
-                .queryParam("unique", unique);
-
+        if (start != null) {
+            builder.queryParam("start", start.format(formatter));
+        }
+        if (end != null) {
+            builder.queryParam("end", end.format(formatter));
+        }
+        if (unique != null) {
+            builder.queryParam("unique", unique);
+        }
         if (uris != null && !uris.isEmpty()) {
-            uris.forEach(uri -> builder.queryParam("uris", uri));
+            builder.queryParam("uris", String.join(",", uris));
         }
 
         HttpEntity<Void> requestEntity = new HttpEntity<>(defaultHeaders());
 
         ResponseEntity<Collection<ViewStats>> response = rest.exchange(
-                builder.toUriString(),
+                builder.encode().toUriString(),
                 HttpMethod.GET,
                 requestEntity,
                 new ParameterizedTypeReference<>() {
                 }
         );
-
+        System.out.println("RESPONSE_STATS\t" + response.getBody());
         return response.getBody();
     }
 

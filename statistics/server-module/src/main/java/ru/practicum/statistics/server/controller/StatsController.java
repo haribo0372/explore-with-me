@@ -2,6 +2,7 @@ package ru.practicum.statistics.server.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,7 +12,6 @@ import ru.practicum.statistics.models.ViewStats;
 import ru.practicum.statistics.services.StatsService;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,20 +24,15 @@ public class StatsController {
 
     @GetMapping
     public Collection<ViewStats> getStats(
-            @RequestParam String start,
-            @RequestParam String end,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
             @RequestParam(required = false) List<String> uris,
             @RequestParam(required = false, defaultValue = "false") Boolean unique) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        LocalDateTime startDateTime = LocalDateTime.parse(start.replace("%20", " "), formatter);
-        LocalDateTime endDateTime = LocalDateTime.parse(end.replace("%20", " "), formatter);
-
-        if (startDateTime.isAfter(endDateTime)) {
+        if (start.isAfter(end)) {
             throw new IllegalArgumentException("'start' должен быть <= 'end'");
         }
 
-        return statsService.getStats(new GetStatsParams(startDateTime, endDateTime, uris, unique));
+        return statsService.getStats(new GetStatsParams(start, end, uris, unique));
     }
 }
