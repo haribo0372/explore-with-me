@@ -26,5 +26,14 @@ public class CompilationEvent implements BaseEntity {
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
+
+    @Override
+    public String toString() {
+        return "CompilationEvent{" +
+                "id=" + id +
+                ", compilation.id=" + compilation.getId() +
+                ", event.id=" + event.getId() +
+                '}';
+    }
 }
 

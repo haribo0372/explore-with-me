@@ -1,6 +1,6 @@
 package ru.practicum.basic.models.enums;
 
-import ru.practicum.basic.WrongStateAction;
+import ru.practicum.basic.exception.models.WrongStateAction;
 
 public enum StateAction {
     SEND_TO_REVIEW,
@@ -37,7 +37,7 @@ public enum StateAction {
                 return CANCEL_REVIEW;
             }
             default -> throw new WrongStateAction(
-                    String.format("%s не валидный. Возможные значения: ['PUBLISH_EVENT', 'REJECT_EVENT']", status));
+                    String.format("%s не валидный. Возможные значения: ['SEND_TO_REVIEW', 'CANCEL_REVIEW']", status));
         }
     }
 }

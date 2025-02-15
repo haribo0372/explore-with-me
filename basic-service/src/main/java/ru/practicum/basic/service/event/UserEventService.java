@@ -19,7 +19,7 @@ public interface UserEventService {
 
     EventFullDto update(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest);
 
-    ParticipationRequestDto getRequestInfo(Long userId, Long eventId);
+    Collection<ParticipationRequestDto> getRequestInfo(Long userId, Long eventId);
 
     EventRequestStatusUpdateResult updateRequests(Long userId,
                                                   Long eventId,

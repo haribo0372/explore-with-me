@@ -25,20 +25,17 @@ public class Event implements BaseEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "annotation", nullable = false)
+    @Column(name = "annotation", nullable = false, length = 2000)
     private String annotation;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @Transient
-    private Long confirmedRequests;
-
     @Column(name = "createdOn", nullable = false)
     private LocalDateTime createdOn;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, length = 7000)
     private String description;
 
     @Column(name = "eventDate", nullable = false)
@@ -57,10 +54,13 @@ public class Event implements BaseEntity {
     @Column(name = "paid")
     private Boolean paid;
 
+    @Column(name = "confirmedRequests", nullable = false)
+    private Long confirmedRequests;
+
     @Column(name = "participantLimit")
     private Integer participantLimit;
 
-    @Column(name = "publishedOn", nullable = false)
+    @Column(name = "publishedOn")
     private LocalDateTime publishedOn;
 
     @Column(name = "requestModeration", nullable = false)

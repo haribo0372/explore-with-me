@@ -2,6 +2,7 @@ package ru.practicum.basic.controller.privatte;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.basic.dto.event.EventFullDto;
 import ru.practicum.basic.dto.event.EventShortDto;
@@ -28,9 +29,10 @@ public class UsersEventsController {
         return eventService.getAll(userId, from, size);
     }
 
-    @PostMapping("/{userId}/requests")
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto addEventWithUserId(@PathVariable Long userId,
-                                         @RequestBody @Valid NewEventDto newEventDto) {
+                                           @RequestBody @Valid NewEventDto newEventDto) {
         return eventService.create(userId, newEventDto);
     }
 
@@ -48,8 +50,8 @@ public class UsersEventsController {
     }
 
     @GetMapping("/{eventId}/requests")
-    public ParticipationRequestDto getRequestInfo(@PathVariable Long userId,
-                                                   @PathVariable Long eventId) {
+    public Collection<ParticipationRequestDto> getRequestInfo(@PathVariable Long userId,
+                                                              @PathVariable Long eventId) {
         return eventService.getRequestInfo(userId, eventId);
     }
 
@@ -57,6 +59,7 @@ public class UsersEventsController {
     public EventRequestStatusUpdateResult updateRequests(@PathVariable Long userId,
                                                          @PathVariable Long eventId,
                                                          @RequestBody EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
+        System.out.println(eventRequestStatusUpdateRequest);
         return eventService.updateRequests(userId, eventId, eventRequestStatusUpdateRequest);
     }
 

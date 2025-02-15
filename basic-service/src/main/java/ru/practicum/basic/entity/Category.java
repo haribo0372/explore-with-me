@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -19,6 +21,9 @@ public class Category implements BaseEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
+
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private Set<Event> events;
 }

@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.basic.dto.user.NewUserRequest;
 import ru.practicum.basic.dto.user.UserDto;
-import ru.practicum.basic.service.UserService;
+import ru.practicum.basic.service.user.AdminUserService;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,16 +17,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminUsersController {
 
-    private final UserService userService;
+    private final AdminUserService userService;
 
     @GetMapping
     public Collection<UserDto> getUsers(@RequestParam(required = false) List<Long> ids,
                                         @RequestParam(required = false, defaultValue = "0") int from,
-                                        @RequestParam(required = false, defaultValue = "0") int size) {
+                                        @RequestParam(required = false, defaultValue = "10") int size) {
         return userService.getAll(ids, from, size);
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public UserDto createNewUser(@RequestBody @Valid NewUserRequest newUserRequest) {
         return userService.create(newUserRequest);
     }

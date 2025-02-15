@@ -3,6 +3,8 @@ package ru.practicum.basic.dto.event;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -33,6 +35,7 @@ public class EventFullDto {
     private Long confirmedRequests;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime createdOn;
 
     @NotBlank(message = "'description' не должен быть пустым или 'null'")
@@ -41,6 +44,7 @@ public class EventFullDto {
 
     @NotBlank(message = "'eventDate' не должен быть пустым или 'null'")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime eventDate;
 
     @NotNull(message = "'initiator' должен быть указан")
@@ -57,6 +61,7 @@ public class EventFullDto {
     private Integer participantLimit;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime publishedOn;
 
     private Boolean requestModeration;
@@ -81,5 +86,9 @@ public class EventFullDto {
 
     public void setState(String state) {
         this.state = EventsLifeCycle.fromString(state);
+    }
+
+    public void setState(EventsLifeCycle state) {
+        this.state = state;
     }
 }

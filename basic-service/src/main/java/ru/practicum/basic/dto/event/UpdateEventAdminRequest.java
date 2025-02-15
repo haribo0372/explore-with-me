@@ -1,6 +1,7 @@
 package ru.practicum.basic.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class UpdateEventAdminRequest {
     @Size(min = 20, max = 7000, message = "Длина 'description' должна быть не менее 20 и не более 7000")
     private String description;
 
+    @FutureOrPresent
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
@@ -35,6 +37,6 @@ public class UpdateEventAdminRequest {
     private StateAction stateAction;
 
     public void setStateAction(String stateAction) {
-        this.stateAction = StateAction.fromString(stateAction, false);
+        this.stateAction = StateAction.fromString(stateAction, true);
     }
 }

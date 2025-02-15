@@ -1,14 +1,16 @@
-package ru.practicum.basic.service;
+package ru.practicum.basic.service.user;
 
+import org.springframework.lang.Nullable;
 import ru.practicum.basic.dto.user.NewUserRequest;
 import ru.practicum.basic.dto.user.UserDto;
 
 import java.util.Collection;
 
-public interface UserService {
+public interface AdminUserService {
     UserDto create(NewUserRequest newUserRequest);
 
-    Collection<UserDto> getAll(Collection<Long> userIds, int from, int size);
+    Collection<UserDto> getAll(@Nullable Collection<Long> userIds, int from, int size);
 
     void delete(Long userId);
+
 }

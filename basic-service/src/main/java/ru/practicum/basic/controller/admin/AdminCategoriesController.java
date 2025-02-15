@@ -17,6 +17,7 @@ public class AdminCategoriesController {
     private final AdminCategoryService categoryService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto createCategory(@RequestBody @Valid NewCategoryDto newCategoryDto) {
         return categoryService.create(newCategoryDto);
     }
@@ -29,7 +30,7 @@ public class AdminCategoriesController {
 
     @PatchMapping("/{catId}")
     public CategoryDto patchCategory(@PathVariable long catId,
-                                     @RequestBody CategoryDto newData) {
+                                     @RequestBody @Valid CategoryDto newData) {
         return categoryService.update(catId, newData);
     }
 }

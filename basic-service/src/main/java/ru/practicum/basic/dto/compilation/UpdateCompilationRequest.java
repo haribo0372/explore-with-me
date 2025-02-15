@@ -6,14 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateCompilationRequest {
     @JsonProperty("events")
-    private HashSet<Integer> eventIds;
+    private Set<Long> eventIds;
 
     private Boolean pinned;
 

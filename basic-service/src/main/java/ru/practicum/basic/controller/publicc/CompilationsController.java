@@ -3,7 +3,7 @@ package ru.practicum.basic.controller.publicc;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.basic.dto.compilation.CompilationDto;
-import ru.practicum.basic.service.CompilationService;
+import ru.practicum.basic.service.compilation.PublicCompilationService;
 
 import java.util.Collection;
 
@@ -12,7 +12,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class CompilationsController {
 
-    private final CompilationService compilationService;
+    private final PublicCompilationService compilationService;
 
     @GetMapping
     public Collection<CompilationDto> getCompilations(@RequestParam(required = false, defaultValue = "0") int from,

@@ -3,18 +3,23 @@ package ru.practicum.basic.dto.event;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.basic.models.Location;
 
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class NewEventDto {
     @NotBlank(message = "'annotation' не должен быть пустым или 'null'")
     @Size(min = 20, max = 2000, message = "Длина 'annotation' должна быть не менее 20 и не более 2000")
@@ -27,8 +32,9 @@ public class NewEventDto {
     @Size(min = 20, max = 7000, message = "Длина 'description' должна быть не менее 20 и не более 7000")
     private String description;
 
-    @NotBlank(message = "'eventDate' не должен быть пустым или 'null'")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @NotNull(message = "'eventDate' не должен 'null'")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime eventDate;
 
     @NotBlank(message = "'title' не должен быть пустым или 'null'")
@@ -39,22 +45,13 @@ public class NewEventDto {
     @NotNull(message = "'location' должен быть указан")
     private Location location;
 
-    private Boolean paid;
-    private Integer participantLimit;
-    private Boolean requestModeration;
+    @JsonSetter(nulls = Nulls.SKIP)
+    private Boolean paid = false;
 
     @JsonSetter(nulls = Nulls.SKIP)
-    public void setPaid(Boolean paid) {
-        this.paid = paid != null && paid;
-    }
+    @Min(value = 0, message = "'participantLimit' должен быть > 0")
+    private Integer participantLimit = 0;
 
     @JsonSetter(nulls = Nulls.SKIP)
-    public void setParticipantLimit(Integer participantLimit) {
-        this.participantLimit = (participantLimit == null) ? 0 : participantLimit;
-    }
-
-    @JsonSetter(nulls = Nulls.SKIP)
-    public void setRequestModeration(Boolean requestModeration) {
-        this.requestModeration = requestModeration == null || requestModeration;
-    }
+    private Boolean requestModeration = true;
 }

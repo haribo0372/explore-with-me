@@ -16,16 +16,13 @@ import java.util.HashSet;
 @NoArgsConstructor
 public class NewCompilationDto {
     @JsonProperty("events")
-    private HashSet<Integer> eventIds;
+    @JsonSetter(nulls = Nulls.SKIP)
+    private HashSet<Long> eventIds = new HashSet<>();
 
-    private Boolean pinned;
+    @JsonSetter(nulls = Nulls.SKIP)
+    private Boolean pinned = false;
 
     @NotBlank(message = "'title' не должен быть пустым или 'null'")
     @Size(min = 1, max = 50, message = "Длина 'title' должна быть не менее 1 и не более 50")
     private String title;
-
-    @JsonSetter(nulls = Nulls.SKIP)
-    public void setPinned(Boolean pinned) {
-        this.pinned = pinned != null && pinned;
-    }
 }

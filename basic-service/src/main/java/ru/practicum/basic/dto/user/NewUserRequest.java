@@ -1,5 +1,6 @@
 package ru.practicum.basic.dto.user;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ public class NewUserRequest {
     private String name;
 
     @NotBlank(message = "'email' не должен быть пустым или 'null'")
+    @Email(message = "'email' должен соответствовать стандарту")
     @Size(min = 6, max = 254, message = "Длина 'name' должна быть не менее 2 и не более 250")
     private String email;
 }

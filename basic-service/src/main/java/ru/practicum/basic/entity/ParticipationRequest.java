@@ -14,8 +14,11 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "participation_requests")
-public class ParticipationRequest {
+@Table(
+        name = "participation_requests",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"event_id", "requester_id"})
+)
+public class ParticipationRequest implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +40,14 @@ public class ParticipationRequest {
     @Enumerated(EnumType.STRING)
     private ParticipationRequestStatus status;
 
+    @Override
+    public String toString() {
+        return "ParticipationRequest{" +
+                "id=" + id +
+                ", event.id=" + (event == null ? null : event.getId()) +
+                ", requester.id=" + (requester == null ? null : requester.getId()) +
+                ", created=" + created +
+                ", status=" + status +
+                '}';
+    }
 }

@@ -1,24 +1,42 @@
 package ru.practicum.basic.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
+import ru.practicum.basic.exception.models.BaseCustomException;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class ApiError {
-    private HttpStatus status;
-    private String message;
+    private final HttpStatus status;
+    private final String message;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime timestamp;
+    private final LocalDateTime timestamp;
 
     private List<String> errors;
-    private String reason;
+    private final String reason;
+
+    public ApiError(BaseCustomException exception) {
+        this.reason = exception.reason;
+        this.status = exception.status;
+        this.message = exception.getMessage();
+        this.timestamp = LocalDateTime.now();
+    }
+
+    public ApiError(Throwable exception, HttpStatus status, String reason) {
+        this.status = status;
+        this.message = exception.getMessage();
+        this.timestamp = LocalDateTime.now();
+        this.reason = reason;
+    }
+
+    public ApiError(HttpStatus status, String message, String reason) {
+        this.status = status;
+        this.message = message;
+        this.timestamp = LocalDateTime.now();
+        this.reason = reason;
+    }
 }

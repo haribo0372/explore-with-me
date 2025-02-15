@@ -8,18 +8,19 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.basic.dto.compilation.CompilationDto;
 import ru.practicum.basic.dto.compilation.NewCompilationDto;
 import ru.practicum.basic.dto.compilation.UpdateCompilationRequest;
-import ru.practicum.basic.service.CompilationService;
+import ru.practicum.basic.service.compilation.AdminCompilationService;
 
 @RestController
 @RequestMapping("/admin/compilations")
 @RequiredArgsConstructor
 public class AdminCompilationsController {
 
-    private final CompilationService compilationService;
+    private final AdminCompilationService compilationService;
 
     @PostMapping
-    public CompilationDto createCompilation(@RequestBody @Valid NewCompilationDto newCategoryDto) {
-        return compilationService.create(newCategoryDto);
+    @ResponseStatus(HttpStatus.CREATED)
+    public CompilationDto createCompilation(@RequestBody @Valid NewCompilationDto newCompilationDto) {
+        return compilationService.create(newCompilationDto);
     }
 
     @DeleteMapping("/{compId}")

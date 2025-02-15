@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.basic.dto.event.EventShortDto;
 
-import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -16,11 +16,11 @@ public class CompilationDto {
     @NotNull(message = "'id' должен быть указан")
     private Long id;
 
-    @NotNull(message = "'pinned' должен быть указан")
-    private Boolean pinned;
-
     @NotBlank(message = "'title' не должен быть пустым или 'null'")
     private String title;
 
-    private HashSet<EventShortDto> events;
+    @NotNull(message = "'pinned' должен быть указан")
+    private Boolean pinned;
+
+    private Set<EventShortDto> events;
 }
