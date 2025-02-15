@@ -136,10 +136,10 @@ public class EventServiceImpl extends BaseServiceImpl<Event>
         }
 
         if (updateEventAdminRequest.getLocation() != null) {
-            Float ULon = updateEventAdminRequest.getLocation().getLon();
-            Float ULat = updateEventAdminRequest.getLocation().getLat();
-            event.setLocationLon(ULon == null ? event.getLocationLon() : ULon);
-            event.setLocationLat(ULat == null ? event.getLocationLat() : ULat);
+            Float uLon = updateEventAdminRequest.getLocation().getLon();
+            Float uLat = updateEventAdminRequest.getLocation().getLat();
+            event.setLocationLon(uLon == null ? event.getLocationLon() : uLon);
+            event.setLocationLat(uLat == null ? event.getLocationLat() : uLat);
         }
 
         if (updateEventAdminRequest.getPaid() != null) {
@@ -228,10 +228,10 @@ public class EventServiceImpl extends BaseServiceImpl<Event>
         }
 
         if (updateEventUserRequest.getLocation() != null) {
-            Float ULon = updateEventUserRequest.getLocation().getLon();
-            Float ULat = updateEventUserRequest.getLocation().getLat();
-            event.setLocationLon(ULon == null ? event.getLocationLon() : ULon);
-            event.setLocationLat(ULat == null ? event.getLocationLat() : ULat);
+            Float uLon = updateEventUserRequest.getLocation().getLon();
+            Float uLat = updateEventUserRequest.getLocation().getLat();
+            event.setLocationLon(uLon == null ? event.getLocationLon() : uLon);
+            event.setLocationLat(uLat == null ? event.getLocationLat() : uLat);
         }
 
         if (updateEventUserRequest.getParticipantLimit() != null) {
