@@ -29,8 +29,9 @@ public class StatsController {
             @RequestParam(required = false) List<String> uris,
             @RequestParam(required = false, defaultValue = "false") Boolean unique) {
 
-        if (start.isAfter(end))
+        if (start.isAfter(end)) {
             throw new IllegalArgumentException("'start' должен быть <= 'end'");
+        }
 
         return statsService.getStats(new GetStatsParams(start, end, uris, unique));
     }
