@@ -71,10 +71,6 @@ public class CompilationServiceImpl extends BaseServiceImpl<Compilation>
 
     @Override
     public Collection<CompilationDto> getAll(int from, int size, Boolean pinned) {
-        if (pinned != null) {
-            return CompilationMapper.toDto(super.findAll(from, size));
-        }
-
         int page = from / size;
         Pageable pageable = PageRequest.of(page, size);
         Collection<CompilationDto> result = pinned != null ?

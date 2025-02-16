@@ -16,8 +16,8 @@ public class ExceptionHandlerUtils {
         log.info("{} -> {}", preMessage, apiError);
     }
 
-    public static void loggingWarn(String preMessage, ApiError apiError) {
-        log.warn("{} -> {}", preMessage, apiError);
+    public static void loggingErr(String preMessage, ApiError apiError) {
+        log.error("{} -> {}", preMessage, apiError);
     }
 
 }

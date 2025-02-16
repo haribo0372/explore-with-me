@@ -128,8 +128,7 @@ public class CustomExceptionHandler {
     public ResponseEntity<ApiError> handleThrowable(Throwable ex) {
         ApiError apiError =
                 new ApiError(ex, HttpStatus.INTERNAL_SERVER_ERROR, "Произошла непредвиденная ошибка");
-        ex.printStackTrace();
-        loggingWarn("ExceptionHandler(Throwable.class)", apiError);
+        loggingErr("ExceptionHandler(Throwable.class)", apiError);
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 }

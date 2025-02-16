@@ -36,12 +36,12 @@ import ru.practicum.statistics.models.ViewStats;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static ru.practicum.basic.mappers.EventMapper.toEventFullDto;
 import static ru.practicum.basic.mappers.EventMapper.toEventShortDto;
-import static ru.practicum.basic.models.enums.ParticipationRequestStatus.CONFIRMED;
-import static ru.practicum.basic.models.enums.ParticipationRequestStatus.REJECTED;
+import static ru.practicum.basic.models.enums.ParticipationRequestStatus.*;
 import static ru.practicum.basic.models.enums.StateAction.PUBLISH_EVENT;
 import static ru.practicum.basic.models.enums.StateAction.REJECT_EVENT;
 
@@ -109,6 +109,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event>
                             HttpStatus.CONFLICT);
                 }
                 event.setState(EventsLifeCycle.PUBLISHED);
+                event.setPublishedOn(LocalDateTime.now());
             } else if (stateAction == REJECT_EVENT) {
                 if (event.getState() == EventsLifeCycle.PUBLISHED) {
                     throw new EventException("Событие можно отклонить, только если оно еще не опубликовано",
@@ -260,47 +261,69 @@ public class EventServiceImpl extends BaseServiceImpl<Event>
     @Override
     public EventRequestStatusUpdateResult updateRequests(Long userId, Long eventId, EventRequestStatusUpdateRequest updateRequest) {
         Event event = getEventIfAccessible(userId, eventId);
+
+        if (event.getParticipantLimit() == 0 || !event.getRequestModeration()) {
+            return collectEventRequestStatusUpdateResult(event);
+        }
+
         fillConfirmedRequests(event);
+        if (event.getConfirmedRequests() + 1 > event.getParticipantLimit())
+            throw new EventException("Не удалось одобрить заявки, превышен лимит участников", HttpStatus.CONFLICT);
+
         Collection<ParticipationRequest> allByEvent = participationRequestRepository.findAllByEvent(event);
-        EventRequestStatus currentStatus = updateRequest.getStatus();
-        boolean flag = currentStatus == EventRequestStatus.CONFIRMED;
         HashSet<Long> requestIds = updateRequest.getRequestIds();
 
-        List<ParticipationRequest> list = allByEvent.stream()
+        boolean flag = updateRequest.getStatus() == EventRequestStatus.CONFIRMED;
+
+        List<ParticipationRequest> filteredRequestIds = allByEvent.stream()
                 .filter(i -> requestIds.contains(i.getId()))
-                .peek(i -> processRequestApproval(event, i, flag))
                 .toList();
-        System.out.println("LIST\t" + list);
-        participationRequestRepository.saveAll(
-                list
-        );
 
-        super.save(event);
+        for (ParticipationRequest request : filteredRequestIds) {
+            fillConfirmedRequests(event);
+            if (flag) {
+                if (event.getConfirmedRequests() + 1 > event.getParticipantLimit()) {
+                    participationRequestRepository.saveAll(
+                            allByEvent.stream()
+                                    .filter(i -> i.getStatus() == PENDING)
+                                    .peek(i -> i.setStatus(REJECTED)).toList()
+                    );
+                    return collectEventRequestStatusUpdateResult(event);
+                }
+                participationRequestRepository.save(confirmTheRequest(event, request));
+            } else {
+                participationRequestRepository.save(rejectedTheRequest(event, request));
+            }
+        }
 
+        return collectEventRequestStatusUpdateResult(event);
+    }
+
+    private ParticipationRequest confirmTheRequest(Event event, ParticipationRequest request) {
+        if (event.getConfirmedRequests() + 1 > event.getParticipantLimit())
+            throw new EventException("Не удалось одобрить заявку, превышен лимит участников", HttpStatus.CONFLICT);
+        request.setStatus(CONFIRMED);
+        return request;
+    }
+
+    private EventRequestStatusUpdateResult collectEventRequestStatusUpdateResult(Event event) {
         return new EventRequestStatusUpdateResult(
                 ParticipationRequestMapper.toDto(
-                        participationRequestRepository.findAllByEventIdAndStatus(eventId, CONFIRMED)),
+                        participationRequestRepository.findAllByEventIdAndStatus(event.getId(), CONFIRMED)),
                 ParticipationRequestMapper.toDto(
-                        participationRequestRepository.findAllByEventIdAndStatus(eventId, REJECTED))
+                        participationRequestRepository.findAllByEventIdAndStatus(event.getId(), REJECTED))
         );
     }
 
-    private void processRequestApproval(Event event, ParticipationRequest i, boolean isConfirmed) {
-        long confirmedRequests;
-        if (isConfirmed) {
-            confirmedRequests = event.getConfirmedRequests() + 1;
-            if (confirmedRequests > event.getParticipantLimit())
-                throw new EventException("Не удалось одобрить заявку, превышен лимит участников", HttpStatus.CONFLICT);
-            i.setStatus(CONFIRMED);
-        } else {
-            if (i.getStatus() == CONFIRMED)
-                throw new EventException(
-                        format("Не удалось отклонить уже принятую заявку ParticipationRequest{%d}", i.getId()),
-                        HttpStatus.CONFLICT
-                );
+    private ParticipationRequest rejectedTheRequest(Event event, ParticipationRequest request) {
+        if (request.getStatus() == CONFIRMED)
+            throw new EventException(
+                    format("Не удалось отклонить уже принятую заявку ParticipationRequest{%d}", request.getId()),
+                    HttpStatus.CONFLICT
+            );
 
-            i.setStatus(REJECTED);
-        }
+        request.setStatus(REJECTED);
+        return request;
     }
 
     public Event getById(Long id) {
@@ -363,27 +386,22 @@ public class EventServiceImpl extends BaseServiceImpl<Event>
     public EventFullDto getPublishEventById(Long eventId, HttpServletRequest request) {
         Event event = super.findById(eventId);
 
-        String uri = format("/events/%d", eventId);
-        statsClient.postHit(uri, request.getRemoteAddr());
-        Collection<ViewStats> stats = statsClient.getStats(LocalDateTime.of(1999, 1, 16, 0, 0),
-                LocalDateTime.now().plusNanos(60), List.of(uri), true);
-        event.setViews(stats.stream().findFirst().get().getHits());
-
         if (event.getState() != EventsLifeCycle.PUBLISHED)
             throw new EventException("Запрашиваемый ресурс не найден или недоступен", HttpStatus.NOT_FOUND);
+
+        String uri = format("/events/%d", eventId);
+        statsClient.postHit(uri, request.getRemoteAddr());
+        Collection<ViewStats> stats = statsClient.getStats(
+                event.getPublishedOn(), LocalDateTime.now(), List.of(uri), true);
+
+        event.setViews(stats.stream().findFirst().get().getHits());
 
         Event saved = super.save(event);
         fillConfirmedRequests(saved);
         return EventMapper.toEventFullDto(saved);
     }
 
-    public void saveEvent(Event event) {
-        if (event.getId() == null)
-            throw new RuntimeException("Сохранение неотслеживаемого события");
-        eventRepository.save(event);
-    }
-
-    public long getConfirmedRequestsByEventId(Long eventId) {
+    private long getConfirmedRequestsByEventId(Long eventId) {
         return participationRequestRepository.countByEventIdAndStatus(eventId, CONFIRMED);
     }
 
@@ -391,7 +409,20 @@ public class EventServiceImpl extends BaseServiceImpl<Event>
         event.setConfirmedRequests(getConfirmedRequestsByEventId(event.getId()));
     }
 
-    private void fillConfirmedRequests(Iterable<Event> iterable) {
-        iterable.forEach(this::fillConfirmedRequests);
+    private void fillConfirmedRequests(Collection<Event> events) {
+        List<Long> eventIds = events.stream().map(Event::getId).toList();
+
+        List<Object[]> results = participationRequestRepository.countByEventIdsAndStatus(
+                eventIds, CONFIRMED);
+
+        Map<Long, Long> confirmedCounts = results.stream()
+                .collect(Collectors.toMap(
+                        row -> (Long) row[0],
+                        row -> (Long) row[1]
+                ));
+
+        events.forEach(event ->
+                event.setConfirmedRequests(confirmedCounts.getOrDefault(event.getId(), 0L))
+        );
     }
 }

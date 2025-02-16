@@ -77,13 +77,11 @@ public class ParticipationRequestServiceImpl extends BaseServiceImpl<Participati
         participationRequest.setRequester(user);
         participationRequest.setEvent(event);
         participationRequest.setCreated(LocalDateTime.now().withNano(0));
-        if (event.getRequestModeration() && event.getParticipantLimit() != 0) {
+        if (event.getRequestModeration() && event.getParticipantLimit() != 0)
             participationRequest.setStatus(PENDING);
-        } else {
-            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
-            eventService.saveEvent(event);
+        else
             participationRequest.setStatus(CONFIRMED);
-        }
+
 
         return toDto(super.save(participationRequest));
     }
