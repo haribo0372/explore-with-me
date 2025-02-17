@@ -23,11 +23,9 @@ public class StatsServiceImpl implements StatsService {
         LocalDateTime start = params.getStart();
         LocalDateTime end = params.getEnd();
 
-        List<ViewStats> viewStats = params.getUnique()
-                ? endpointHitRepository.getStatsWithUniqueIp(start, end, params.getUris().isEmpty() ?
-                null : params.getUris())
-                : endpointHitRepository.getStatsWithoutUniqueIp(start, end, params.getUris().isEmpty() ?
-                null : params.getUris());
+        List<ViewStats> viewStats = params.getUnique() ?
+                endpointHitRepository.getStatsWithUniqueIp(start, end, params.getUris().isEmpty() ? null : params.getUris())
+                : endpointHitRepository.getStatsWithoutUniqueIp(start, end, params.getUris().isEmpty() ? null : params.getUris());
 
         log.info("StatsServiceImpl::getStats({}, {}, {}, {}) -> {}",
                 start, end, params.getUnique(), params.getUnique(), viewStats);
