@@ -59,7 +59,6 @@ public class UsersEventsController {
     public EventRequestStatusUpdateResult updateRequests(@PathVariable Long userId,
                                                          @PathVariable Long eventId,
                                                          @RequestBody EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
-        System.out.println(eventRequestStatusUpdateRequest);
         return eventService.updateRequests(userId, eventId, eventRequestStatusUpdateRequest);
     }
 
