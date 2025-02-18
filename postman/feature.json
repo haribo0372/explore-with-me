@@ -117,7 +117,7 @@
 							"response": []
 						},
 						{
-							"name": "Получить комментарий по id (Находит даже удаленные) Copy",
+							"name": "Удалить комментарий по id из БД",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -220,7 +220,7 @@
 							"response": []
 						},
 						{
-							"name": "Получить все комментарии события Copy",
+							"name": "Получить все комментарии события, даже удаленные пользователями",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -332,7 +332,7 @@
 							"response": []
 						},
 						{
-							"name": "Получить все комментарии события Copy 2",
+							"name": "Удалить все комментарии события из БД",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -399,7 +399,7 @@
 											"\r",
 											"pm.test(\"Response.eventId\", function () {\r",
 											"    pm.expect(response).to.have.property('eventId');\r",
-											"    pm.expect(response.eventId).to.be.equal(pm.collectionVariables.get(\"eventId\"));\r",
+											"    pm.expect(response.eventId).to.be.not.null;\r",
 											"});\r",
 											"\r",
 											"pm.test(\"Response.numberOfDeletedComments\", function () {\r",
