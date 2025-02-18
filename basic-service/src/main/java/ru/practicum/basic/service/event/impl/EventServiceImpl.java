@@ -292,7 +292,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event>
                 }
                 participationRequestRepository.save(confirmTheRequest(event, request));
             } else {
-                participationRequestRepository.save(rejectedTheRequest(event, request));
+                participationRequestRepository.save(rejectedTheRequest(request));
             }
         }
 
@@ -315,7 +315,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event>
         );
     }
 
-    private ParticipationRequest rejectedTheRequest(Event event, ParticipationRequest request) {
+    private ParticipationRequest rejectedTheRequest(ParticipationRequest request) {
         if (request.getStatus() == CONFIRMED)
             throw new EventException(
                     format("Не удалось отклонить уже принятую заявку ParticipationRequest{%d}", request.getId()),
@@ -328,6 +328,14 @@ public class EventServiceImpl extends BaseServiceImpl<Event>
 
     public Event getById(Long id) {
         Event found = super.findById(id);
+        fillConfirmedRequests(found);
+        return found;
+    }
+
+    public Event getByIdIfPublish(Long id) {
+        Event found = super.findById(id);
+        if (found.getState() != EventsLifeCycle.PUBLISHED)
+            throw new EventException("Запрашиваемый ресурс не найден или недоступен", HttpStatus.NOT_FOUND);
         fillConfirmedRequests(found);
         return found;
     }

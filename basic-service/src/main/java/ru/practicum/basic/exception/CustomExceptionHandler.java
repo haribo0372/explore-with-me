@@ -97,6 +97,13 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(apiError, calibrateStatus(apiError, calibrateStatus(apiError, HttpStatus.CONFLICT)));
     }
 
+    @ExceptionHandler(CommentException.class)
+    public ResponseEntity<ApiError> handleCommentException(CommentException ex) {
+        ApiError apiError = new ApiError(ex);
+        loggingInfo("ExceptionHandler(CommentException.class)", apiError);
+        return new ResponseEntity<>(apiError, calibrateStatus(apiError, calibrateStatus(apiError, HttpStatus.CONFLICT)));
+    }
+
     @ExceptionHandler(WrongStateAction.class)
     public ResponseEntity<ApiError> handleNotFoundException(WrongStateAction ex) {
         ApiError apiError = new ApiError(ex);
